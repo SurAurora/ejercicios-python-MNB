@@ -1,0 +1,16 @@
+# Material docente no publicado para estudiantes
+soluciones/
+
+# Archivos temporales de Python
+__pycache__/
+*.py[cod]
+
+# Entornos virtuales locales
+.venv/
+venv/
+
+# Archivos generados localmente
+*.png
+*.pdf
+*.ipynb_checkpoints/
+
