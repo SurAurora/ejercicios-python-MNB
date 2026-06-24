@@ -1,102 +1,180 @@
 # Clase 2 - Analisis de series de tiempo atmosfericas con Python
 
-**Objetivo:** aplicar `numpy`, `pandas` y `matplotlib` para analizar series de
-tiempo, calcular estadisticos, comparar observaciones con una simulacion y
-construir una interpretacion meteorologica breve.
+**Objetivo:** aplicar `pandas`, `numpy` y `matplotlib` para analizar una serie
+de observaciones meteorologicas reales: temperatura media diaria en la estacion
+Quinta Normal.
 
-Use el archivo `datos_clase_02_series.csv`.
+Use el archivo:
+
+```text
+datos/QN_TEMP.csv
+```
+
+El archivo contiene:
+
+- `agno`: año de la observacion
+- `mes`: mes de la observacion
+- `dia`: dia de la observacion
+- `valor`: temperatura media diaria en grados C
 
 ## Ejercicio 1. Lectura e inspeccion
 
 Lea el archivo CSV con `pandas`.
 
+Como los nombres de columnas pueden venir con espacios, limpie los nombres con:
+
+```python
+datos.columns = datos.columns.str.strip()
+```
+
 Responda:
 
 - Cuantas filas tiene la tabla?
 - Cuales son los nombres de las columnas?
-- Cual es el rango horario de la serie?
+- Cual es el primer año disponible?
+- Cual es el ultimo año disponible?
+- Cual es el rango de temperaturas observadas?
 
-## Ejercicio 2. Estadistica descriptiva
+## Ejercicio 2. Crear una columna de fecha
 
-Para `temperatura_obs`, calcule:
+Cree una columna llamada `fecha` usando `pd.to_datetime`.
+
+Una forma posible es:
+
+```python
+datos["fecha"] = pd.to_datetime(
+    dict(year=datos["agno"], month=datos["mes"], day=datos["dia"])
+)
+```
+
+Luego:
+
+- ordene la tabla por fecha
+- verifique la primera y ultima fecha disponible
+- cuente cuantos dias tiene la serie
+- compare ese numero con la cantidad de dias entre la primera y ultima fecha
+
+Comente si la serie tiene dias faltantes.
+
+## Ejercicio 3. Estadistica descriptiva
+
+Para la columna `valor`, calcule:
 
 - promedio
 - desviacion estandar
 - minimo
 - maximo
-- hora de la temperatura maxima
+- percentil 10
+- percentil 90
 
-Repita el promedio y la desviacion estandar para `viento_obs`.
+Identifique ademas:
 
-## Ejercicio 3. Comparacion observacion-modelo
+- fecha de la temperatura media diaria minima
+- fecha de la temperatura media diaria maxima
 
-Calcule el error del modelo:
+## Ejercicio 4. Climatologia mensual
 
-```python
-error_T = temperatura_modelo - temperatura_obs
-error_viento = viento_modelo - viento_obs
-```
-
-Luego calcule:
-
-- sesgo medio de temperatura
-- error absoluto medio de temperatura
-- sesgo medio de viento
-- error absoluto medio de viento
-
-Interprete si el modelo esta, en promedio, mas calido/frio y con mas/menos
-viento que las observaciones.
-
-## Ejercicio 4. Tendencia y regresion lineal
-
-Ajuste una recta simple entre hora y temperatura observada:
-
-```python
-coef = np.polyfit(hora, temperatura_obs, 1)
-pendiente = coef[0]
-intercepto = coef[1]
-```
-
-Grafique la serie observada y la recta ajustada.
+Calcule la temperatura media para cada mes usando `groupby`.
 
 Responda:
 
-- Que unidades tiene la pendiente?
-- Es razonable interpretar una unica tendencia lineal para todo el dia?
+- Cual es el mes mas calido en promedio?
+- Cual es el mes mas frio en promedio?
+- Cual es la amplitud anual aproximada entre esos dos meses?
 
-## Ejercicio 5. Correlacion
+Grafique la climatologia mensual con una linea o barras.
 
-Calcule la correlacion entre:
+## Ejercicio 5. Anomalias respecto a la climatologia mensual
 
-- `temperatura_obs` y `temperatura_modelo`
-- `viento_obs` y `viento_modelo`
-- `temperatura_obs` y `viento_obs`
+Cree una columna `climatologia_mensual` que asigne a cada dia el promedio
+climatologico de su mes.
 
-Comente cual relacion es mas fuerte y cual requiere mas cuidado al interpretarse.
+Luego cree:
 
-## Ejercicio 6. Analisis de compuestos
+```python
+datos["anomalia"] = datos["valor"] - datos["climatologia_mensual"]
+```
 
-Cree una nueva columna `periodo` con estas categorias:
+Calcule:
 
-- `madrugada`: 0 a 5 h
-- `manana`: 6 a 11 h
-- `tarde`: 12 a 17 h
-- `noche`: 18 a 23 h
+- promedio de las anomalias
+- desviacion estandar de las anomalias
+- fecha de la anomalia positiva mas alta
+- fecha de la anomalia negativa mas baja
 
-Calcule el promedio por periodo para:
+Explique por que las anomalias permiten comparar dias de meses distintos.
 
-- temperatura observada
-- viento observado
-- precipitacion
+## Ejercicio 6. Tendencia anual
 
-Grafique los promedios de temperatura y viento por periodo.
+Calcule la temperatura media anual:
 
-## Ejercicio 7. Figuras finales
+```python
+temperatura_anual = datos.groupby("agno")["valor"].mean()
+```
 
-Genere dos figuras:
+Ajuste una recta entre año y temperatura media anual usando `np.polyfit`.
 
-1. Temperatura observada y modelada vs hora.
-2. Viento observado y modelado vs hora.
+Responda:
 
-Cada figura debe incluir titulo, ejes con unidades, leyenda y grilla.
+- Cual es la pendiente en grados C/año?
+- Cual es la pendiente aproximada en grados C/decada?
+- La tendencia calculada representa variabilidad diaria, anual o climatica?
+
+Grafique la temperatura media anual y la recta ajustada.
+
+## Ejercicio 7. Dias calidos y frios
+
+Defina dos umbrales usando percentiles:
+
+```python
+umbral_frio = datos["valor"].quantile(0.10)
+umbral_calido = datos["valor"].quantile(0.90)
+```
+
+Cree una columna `categoria`:
+
+- `"frio"` si `valor <= umbral_frio`
+- `"calido"` si `valor >= umbral_calido`
+- `"normal"` en los otros casos
+
+Calcule:
+
+- cuantos dias frios hay
+- cuantos dias calidos hay
+- en que mes ocurren mas dias calidos
+- en que mes ocurren mas dias frios
+
+## Ejercicio 8. Promedios por decada
+
+Cree una columna `decada`:
+
+```python
+datos["decada"] = (datos["agno"] // 10) * 10
+```
+
+Calcule la temperatura media por decada.
+
+Grafique los promedios por decada y comente si se observa una diferencia entre
+las primeras y las ultimas decadas disponibles.
+
+## Ejercicio 9. Figuras finales
+
+Genere tres figuras:
+
+1. Serie completa de temperatura media diaria.
+2. Climatologia mensual.
+3. Temperatura media anual con tendencia lineal.
+
+Cada figura debe incluir:
+
+- titulo
+- ejes con unidades
+- grilla
+- leyenda cuando corresponda
+
+## Pregunta breve
+
+Explique en 4 a 6 lineas una ventaja y una limitacion de usar una serie de una
+sola estacion meteorologica para caracterizar cambios de temperatura en una
+ciudad.
 

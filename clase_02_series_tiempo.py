@@ -1,5 +1,5 @@
 """
-Clase 2 - Analisis de series de tiempo atmosfericas
+Clase 2 - Analisis de temperatura media diaria en Quinta Normal
 
 Complete los espacios marcados con TODO.
 Ejecute este archivo desde la carpeta ejercicios_python:
@@ -15,98 +15,141 @@ import matplotlib.pyplot as plt
 # ============================================================
 # Ejercicio 1. Lectura e inspeccion
 # ============================================================
-datos = pd.read_csv("datos_clase_02_series.csv")
+datos = pd.read_csv("datos/QN_TEMP.csv")
+datos.columns = datos.columns.str.strip()
 
 print("Ejercicio 1")
 print(datos.head())
-print("Numero de filas:", None)  # TODO
-print("Columnas:", None)         # TODO
-print("Rango horario:", None)    # TODO
+print("Numero de filas:", None)       # TODO
+print("Columnas:", None)              # TODO
+print("Primer año disponible:", None) # TODO
+print("Ultimo año disponible:", None) # TODO
+print("Temperatura minima:", None)    # TODO
+print("Temperatura maxima:", None)    # TODO
 
 
 # ============================================================
-# Ejercicio 2. Estadistica descriptiva
+# Ejercicio 2. Crear una columna de fecha
 # ============================================================
-hora = datos["hora"]
-temperatura_obs = datos["temperatura_obs"]
-temperatura_modelo = datos["temperatura_modelo"]
-viento_obs = datos["viento_obs"]
-viento_modelo = datos["viento_modelo"]
+# TODO: cree la columna fecha con pd.to_datetime
+datos["fecha"] = None
 
-# TODO: calcule estadisticos de temperatura_obs y viento_obs
+# TODO: ordene la tabla por fecha
 
 print("\nEjercicio 2")
-print("Promedio temperatura observada:", None)
-print("Desviacion estandar temperatura observada:", None)
-print("Minimo temperatura observada:", None)
-print("Maximo temperatura observada:", None)
-print("Hora temperatura maxima:", None)
-print("Promedio viento observado:", None)
-print("Desviacion estandar viento observado:", None)
+print("Primera fecha:", None)          # TODO
+print("Ultima fecha:", None)           # TODO
+print("Dias con observacion:", None)   # TODO
+print("Dias calendario:", None)        # TODO
+print("Dias faltantes:", None)         # TODO
 
 
 # ============================================================
-# Ejercicio 3. Comparacion observacion-modelo
+# Ejercicio 3. Estadistica descriptiva
 # ============================================================
-# TODO: calcule errores, sesgos y errores absolutos medios
+temperatura = datos["valor"]
+
+# TODO: calcule estadisticos de temperatura
 
 print("\nEjercicio 3")
-print("Sesgo medio temperatura:", None)
-print("Error absoluto medio temperatura:", None)
-print("Sesgo medio viento:", None)
-print("Error absoluto medio viento:", None)
+print("Promedio:", None)
+print("Desviacion estandar:", None)
+print("Minimo:", None)
+print("Maximo:", None)
+print("Percentil 10:", None)
+print("Percentil 90:", None)
+print("Fecha temperatura minima:", None)
+print("Fecha temperatura maxima:", None)
 
 
 # ============================================================
-# Ejercicio 4. Tendencia y regresion lineal
+# Ejercicio 4. Climatologia mensual
 # ============================================================
+# TODO: calcule la temperatura media por mes
+climatologia_mensual = None
+
+print("\nEjercicio 4")
+print(climatologia_mensual)
+print("Mes mas calido:", None)
+print("Mes mas frio:", None)
+print("Amplitud anual aproximada:", None)
+
+# TODO: grafique la climatologia mensual
+
+
+# ============================================================
+# Ejercicio 5. Anomalias respecto a la climatologia mensual
+# ============================================================
+# TODO: cree climatologia_mensual y anomalia para cada dia
+
+print("\nEjercicio 5")
+print("Promedio de anomalias:", None)
+print("Desviacion estandar de anomalias:", None)
+print("Fecha anomalia positiva mas alta:", None)
+print("Fecha anomalia negativa mas baja:", None)
+
+
+# ============================================================
+# Ejercicio 6. Tendencia anual
+# ============================================================
+# TODO: calcule temperatura media anual
+temperatura_anual = None
+
 # TODO: ajuste una recta con np.polyfit
 pendiente = None
 intercepto = None
-temperatura_ajustada = None
+tendencia = None
 
-print("\nEjercicio 4")
-print("Pendiente:", pendiente, "grados C/h")
-print("Intercepto:", intercepto, "grados C")
+print("\nEjercicio 6")
+print("Pendiente:", pendiente, "grados C/año")
+print("Pendiente:", None, "grados C/decada")  # TODO
 
-# TODO: grafique temperatura_obs y temperatura_ajustada
-
-
-# ============================================================
-# Ejercicio 5. Correlacion
-# ============================================================
-# TODO: use np.corrcoef o pandas.Series.corr
-
-print("\nEjercicio 5")
-print("Correlacion temperatura obs-modelo:", None)
-print("Correlacion viento obs-modelo:", None)
-print("Correlacion temperatura-viento observado:", None)
+# TODO: grafique temperatura_anual y tendencia
 
 
 # ============================================================
-# Ejercicio 6. Analisis de compuestos
+# Ejercicio 7. Dias calidos y frios
 # ============================================================
-def clasificar_periodo(h):
-    """Clasifica una hora del dia en madrugada, manana, tarde o noche."""
-    # TODO: complete la funcion
+# TODO: calcule umbrales con quantile
+umbral_frio = None
+umbral_calido = None
+
+
+def clasificar_dia(valor):
+    """Clasifica un dia como frio, normal o calido."""
+    # TODO: use los umbrales definidos arriba
     return "sin clasificar"
 
 
-datos["periodo"] = datos["hora"].apply(clasificar_periodo)
+# TODO: cree la columna categoria aplicando clasificar_dia
 
-# TODO: calcule promedios por periodo
-compuestos = None
-
-print("\nEjercicio 6")
-print(compuestos)
-
-# TODO: grafique compuestos de temperatura y viento
+print("\nEjercicio 7")
+print("Umbral frio:", umbral_frio)
+print("Umbral calido:", umbral_calido)
+print("Cantidad de dias frios:", None)
+print("Cantidad de dias calidos:", None)
+print("Mes con mas dias calidos:", None)
+print("Mes con mas dias frios:", None)
 
 
 # ============================================================
-# Ejercicio 7. Figuras finales
+# Ejercicio 8. Promedios por decada
 # ============================================================
-# TODO: grafique temperatura observada/modelada y viento observado/modelado
+# TODO: cree columna decada y calcule temperatura media por decada
+temperatura_decadal = None
+
+print("\nEjercicio 8")
+print(temperatura_decadal)
+
+# TODO: grafique temperatura_decadal
+
+
+# ============================================================
+# Ejercicio 9. Figuras finales
+# ============================================================
+# TODO: figura 1, serie completa de temperatura media diaria
+# TODO: figura 2, climatologia mensual
+# TODO: figura 3, temperatura media anual con tendencia
 
 plt.show()
 

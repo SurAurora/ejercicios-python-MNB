@@ -13,7 +13,8 @@ Basico.
   tiempo atmosfericas.
 - `clase_02_series_tiempo.py`: archivo base para completar los ejercicios de la
   segunda clase.
-- `datos_clase_02_series.csv`: datos sinteticos para la segunda clase.
+- `datos/QN_TEMP.csv`: observaciones de temperatura media diaria en Quinta
+  Normal para la segunda clase.
 
 ## Como usar este material
 
