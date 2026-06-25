@@ -1,4 +1,4 @@
-# Clase 2026-06-24 - Analisis de series de tiempo atmosfericas con Python
+# Clase 2026-06-25 - Analisis de series de tiempo atmosfericas con Python
 
 **Objetivo:** aplicar `pandas`, `numpy` y `matplotlib` para analizar una serie
 de observaciones meteorologicas reales: temperatura media diaria en la estacion
