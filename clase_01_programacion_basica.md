@@ -1,4 +1,4 @@
-# Clase 1 - Programacion basica en Python
+# Clase 2026-06-24 - Programacion basica en Python
 
 **Objetivo:** practicar los pilares iniciales de programacion en Python:
 variables, ciclos `for`, condicionales `if`, ciclos `while` y funciones,
